@@ -215,6 +215,13 @@ public interface BatchAccount extends
         interface WithCreate extends
             Creatable<BatchAccount>,
             Resource.DefinitionWithTags<WithCreate> {
+
+            /**
+             * Set the pool allocation mode also affects how clients may authenticate to the Batch Service API. If the mode is BatchService, clients may authenticate using access keys or Azure Active Directory. If the mode is UserSubscription, clients must use Azure Active Directory. The default is BatchService. Possible values include: 'BatchService', 'UserSubscription'.
+             *
+             * @param poolAllocationMode the poolAllocationMode value to set
+             */
+            DefinitionStages.WithCreate withPoolAllocationMode(PoolAllocationMode poolAllocationMode);
         }
     }
 

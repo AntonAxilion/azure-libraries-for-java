@@ -16,6 +16,7 @@ import com.microsoft.azure.management.batch.VirtualMachineFamilyCoreQuota;
 import com.microsoft.azure.management.batch.AccountKeyType;
 import com.microsoft.azure.management.batch.Application;
 import com.microsoft.azure.management.batch.Pool;
+import com.microsoft.azure.management.batch.PoolAllocationMode;
 import com.microsoft.azure.management.batch.AutoStorageBaseProperties;
 import com.microsoft.azure.management.resources.fluentcore.arm.models.implementation.GroupableResourceImpl;
 import com.microsoft.azure.management.resources.fluentcore.model.Creatable;
@@ -49,6 +50,7 @@ public class BatchAccountImpl
     private ApplicationsImpl applicationsImpl;
     private AutoStorageProperties autoStorage;
     private PoolsImpl poolsImpl;
+    private PoolAllocationMode poolAllocationMode;
 
     protected BatchAccountImpl(String name,
                                BatchAccountInner innerObject,
@@ -96,6 +98,9 @@ public class BatchAccountImpl
 
         batchAccountCreateParametersInner.withLocation(this.inner().location());
         batchAccountCreateParametersInner.withTags(this.inner().getTags());
+        if (poolAllocationMode != null) {
+            batchAccountCreateParametersInner.withPoolAllocationMode(poolAllocationMode);
+        }
 
         return this.manager().inner().batchAccounts().createAsync(this.resourceGroupName(), this.name(), batchAccountCreateParametersInner)
                 .map(new Func1<BatchAccountInner, BatchAccount>() {
@@ -336,6 +341,12 @@ public class BatchAccountImpl
     @Override
     public Update withoutPool(String poolId) {
         this.poolsImpl.remove(poolId);
+        return this;
+    }
+
+    @Override
+    public BatchAccountImpl withPoolAllocationMode(PoolAllocationMode poolAllocationMode) {
+        this.poolAllocationMode = poolAllocationMode;
         return this;
     }
 }
